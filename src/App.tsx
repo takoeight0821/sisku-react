@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { ChangeEvent, useState } from 'react';
+import { faker } from '@faker-js/faker';
+import Toolbar from '@mui/material/Toolbar';
+import TextField from '@mui/material/TextField';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import { CssBaseline } from '@mui/material';
+import { ElevationScroll } from './ElevationScroll';
+import { SearchAppBar } from './SearchAppBar';
 
 function App() {
+  const [inputText, setInputText] = useState('');
+  const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <CssBaseline />
+      <ElevationScroll>
+        <SearchAppBar onChange={inputHandler} />
+      </ElevationScroll>
+      <Toolbar />
+      <ItemsList inputText={inputText} items={data} />
+    </>
   );
 }
+
+const data: { id: number, text: string }[] = [...Array(100)].map((_, i) => ({
+  id: i,
+  text: faker.lorem.paragraphs()
+}));
+
+const ItemsList = ({ inputText, items }: { inputText: string, items: { id: number, text: string }[] }) => {
+  const filteredItems = items.filter(item => item.text.toLowerCase().includes(inputText));
+
+  return (
+    <List>
+      {filteredItems.map(item => (
+        <ListItem key={item.id}>
+          <TextField id="outlined-multiline" multiline fullWidth value={item.text} />
+        </ListItem>
+      ))}
+    </List>
+  );
+
+};
 
 export default App;
