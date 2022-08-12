@@ -8,6 +8,8 @@ import ListItem from '@mui/material/ListItem';
 import { CssBaseline } from '@mui/material';
 import { ElevationScroll } from './ElevationScroll';
 import { SearchAppBar } from './SearchAppBar';
+import ReactMarkdown from 'react-markdown';
+import Box from '@mui/system/Box';
 
 function App() {
   const [inputText, setInputText] = useState('');
@@ -38,10 +40,13 @@ const ItemsList = ({ inputText, items }: { inputText: string, items: { id: numbe
 
   return (
     <List>
-      {filteredItems.map(item => (
-        <ListItem key={item.id}>
-          <TextField id="outlined-multiline" multiline fullWidth value={item.text} />
-        </ListItem>
+      {filteredItems.map(item => (<ListItem key={item.id} >
+        <Box sx={{
+          border: 1, mx: 1, px: 2, width: '100%',
+        }}>
+          <ReactMarkdown>{`Markdown ${item.id}\n\`\`\`\n${item.text}\n\`\`\``}</ReactMarkdown>
+        </Box>
+      </ListItem>
       ))}
     </List>
   );
