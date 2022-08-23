@@ -9,6 +9,7 @@ import { SearchAppBar } from './SearchAppBar';
 import ReactMarkdown from 'react-markdown';
 import Box from '@mui/system/Box';
 import * as lsp from "vscode-languageserver-types";
+import request from 'graphql-request';
 
 interface Projects {
   [projectId: string]: Hovercraft;
@@ -35,8 +36,7 @@ function App() {
   const [entries, setEntries] = useState<Entry[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/hovercraft')
-      .then(res => res.json())
+    request('http://localhost:8080/', `{ hovercraft }`)
       .then(res => { console.log(res); return res; })
       .then((projects: Projects) => {
         for (let projectId in projects) {
